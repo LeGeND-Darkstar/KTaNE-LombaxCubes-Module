@@ -1,1 +1,1 @@
-KTaNE-TheLombaxCubes-Module
+#[ModKit Wiki](../../wiki)
