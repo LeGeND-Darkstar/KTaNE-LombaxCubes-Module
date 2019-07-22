@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 using KModkit;
+using System.Text.RegularExpressions;
 
 public class TheLombaxCubesScript : MonoBehaviour
 {
@@ -126,6 +127,8 @@ public class TheLombaxCubesScript : MonoBehaviour
     int CubeYColour;
 
     bool correctAnswer;
+    bool animInProg;
+    bool turnInProg;
 
     static int moduleIdCounter = 1;
 
@@ -135,6 +138,8 @@ public class TheLombaxCubesScript : MonoBehaviour
 
 	void Start()
     {
+        animInProg = false;
+        turnInProg = false;
         CalculateRules();
         StartCoroutine(StartupPart1());
     }
@@ -629,6 +634,7 @@ public class TheLombaxCubesScript : MonoBehaviour
         GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.WireSequenceMechanism, transform);
         while (movement != 60)
         {
+            animInProg = true;
             yield return new WaitForSeconds(0.015f);
             Cubes[0].transform.localPosition = Cubes[0].transform.localPosition + Vector3.up * 0.001f;
             CubesBases[0].transform.localPosition = CubesBases[0].transform.localPosition + Vector3.up * 0.001f;
@@ -645,6 +651,7 @@ public class TheLombaxCubesScript : MonoBehaviour
             button.transform.localPosition = button.transform.localPosition + Vector3.up * 0.001f;
             movement++;
         }
+        animInProg = false;
         moduleSolved = false;
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(CubeStartup());
@@ -653,7 +660,7 @@ public class TheLombaxCubesScript : MonoBehaviour
     IEnumerator CubeStartup()
     {
         yield return new WaitForSeconds(0.1f);
-        if (!moduleSolved)
+        if (!moduleSolved && turnInProg == false)
         {
             StartCoroutine(CubeSpin());
         }
@@ -666,6 +673,7 @@ public class TheLombaxCubesScript : MonoBehaviour
         GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.WireSequenceMechanism, transform);
         while (movement != 60)
         {
+            animInProg = true;
             yield return new WaitForSeconds(0.015f);
             Cubes[0].transform.localPosition = Cubes[0].transform.localPosition + Vector3.up * -0.001f;
             CubesBases[0].transform.localPosition = CubesBases[0].transform.localPosition + Vector3.up * -0.001f;
@@ -682,6 +690,7 @@ public class TheLombaxCubesScript : MonoBehaviour
             button.transform.localPosition = button.transform.localPosition + Vector3.up * -0.001f;
             movement++;
         }
+        animInProg = false;
     }
 
     IEnumerator CubesUp()
@@ -691,6 +700,7 @@ public class TheLombaxCubesScript : MonoBehaviour
         GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.WireSequenceMechanism, transform);
         while (movement != 60)
         {
+            animInProg = true;
             yield return new WaitForSeconds(0.015f);
             Cubes[0].transform.localPosition = Cubes[0].transform.localPosition + Vector3.up * 0.001f;
             CubesBases[0].transform.localPosition = CubesBases[0].transform.localPosition + Vector3.up * 0.001f;
@@ -707,6 +717,7 @@ public class TheLombaxCubesScript : MonoBehaviour
             button.transform.localPosition = button.transform.localPosition + Vector3.up * 0.001f;
             movement++;
         }
+        animInProg = false;
     }
 
     IEnumerator CubeSpin()
@@ -718,6 +729,7 @@ public class TheLombaxCubesScript : MonoBehaviour
             int rotationChoice = UnityEngine.Random.Range(0, 6);
             while (rotation != 180)
             {
+                animInProg = true;
                 if (rotationChoice == 0)
                 {
                     yield return new WaitForSeconds(0.005f);
@@ -755,7 +767,104 @@ public class TheLombaxCubesScript : MonoBehaviour
                     rotation++;
                 }
             }
+            animInProg = false;
         }
         StartCoroutine(CubeStartup());
+    }
+
+    IEnumerator CubesRight()
+    {
+        int rotation = 0;
+        {
+            while (rotation != 180)
+            {
+                animInProg = true;
+                yield return new WaitForSeconds(0.01f);
+                Cubes[0].transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.50f) * Cubes[0].transform.localRotation;
+                Cubes[1].transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.50f) * Cubes[1].transform.localRotation;
+                Cubes[2].transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.50f) * Cubes[2].transform.localRotation;
+                Cubes[3].transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.50f) * Cubes[3].transform.localRotation;
+                Cubes[4].transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.50f) * Cubes[4].transform.localRotation;
+                Cubes[5].transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.50f) * Cubes[5].transform.localRotation;
+                rotation++;
+            }
+            animInProg = false;
+        }
+    }
+
+    IEnumerator CubesD()
+    {
+        int rotation = 0;
+        {
+            while (rotation != 180)
+            {
+                animInProg = true;
+                yield return new WaitForSeconds(0.01f);
+                Cubes[0].transform.localRotation = Quaternion.Euler(0.50f, 0.0f, 0.0f) * Cubes[0].transform.localRotation;
+                Cubes[1].transform.localRotation = Quaternion.Euler(0.50f, 0.0f, 0.0f) * Cubes[1].transform.localRotation;
+                Cubes[2].transform.localRotation = Quaternion.Euler(0.50f, 0.0f, 0.0f) * Cubes[2].transform.localRotation;
+                Cubes[3].transform.localRotation = Quaternion.Euler(0.50f, 0.0f, 0.0f) * Cubes[3].transform.localRotation;
+                Cubes[4].transform.localRotation = Quaternion.Euler(0.50f, 0.0f, 0.0f) * Cubes[4].transform.localRotation;
+                Cubes[5].transform.localRotation = Quaternion.Euler(0.50f, 0.0f, 0.0f) * Cubes[5].transform.localRotation;
+                rotation++;
+            }
+            animInProg = false;
+        }
+    }
+
+    //twitch plays
+    private bool inputValid(string s)
+    {
+        string[] valids = { "0","1","2","3","4","5","6","7","8","9" };
+        if (!valids.Contains(s))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    #pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"!{0} press 3 [Presses the button when the last digit of the bomb's timer is '3'] | !{0} turn [Turns all the cubes showing all sides]";
+    #pragma warning restore 414
+
+    IEnumerator ProcessTwitchCommand(string command)
+    {
+        if (Regex.IsMatch(command, @"^\s*turn\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            yield return null;
+            //while loops are to wait for turns to finish
+            while (animInProg != false) yield return new WaitForSeconds(0.1f);
+            turnInProg = true;
+            StartCoroutine(CubesD());
+            while (animInProg != false) yield return new WaitForSeconds(0.1f);
+            StartCoroutine(CubesRight());
+            while (animInProg != false) yield return new WaitForSeconds(0.1f);
+            StartCoroutine(CubesRight());
+            while (animInProg != false) yield return new WaitForSeconds(0.1f);
+            StartCoroutine(CubesRight());
+            while (animInProg != false) yield return new WaitForSeconds(0.1f);
+            StartCoroutine(CubesRight());
+            while (animInProg != false) yield return new WaitForSeconds(0.1f);
+            StartCoroutine(CubesD());
+            while (animInProg != false) yield return new WaitForSeconds(0.1f);
+            turnInProg = false;
+            StartCoroutine(CubeStartup());
+            yield break;
+        }
+        string[] parameters = command.Split(' ');
+        if (Regex.IsMatch(parameters[0], @"^\s*press\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            if(parameters.Length == 2)
+            {
+                if (inputValid(parameters[1]))
+                {
+                    yield return null;
+                    yield return "Pressing the button at '##:#" + parameters[1] + "'!";
+                    while (!Bomb.GetFormattedTime().Substring(Bomb.GetFormattedTime().Length - 1, 1).EqualsIgnoreCase(parameters[1])) yield return "trycancel The button was not pressed due to a request to cancel.";
+                    Button.OnInteract();
+                }
+            }
+            yield break;
+        }
     }
 }
